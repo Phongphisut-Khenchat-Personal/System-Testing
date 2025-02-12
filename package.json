@@ -1,0 +1,26 @@
+{
+  "name": "PRAMERN-System-Testing",
+  "version": "1.0.0",
+  "description": "Automated testing for PRAMERN system using Playwright.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Phongphisut-Khenchat-Personal/System-Testing.git"
+  },
+  "keywords": ["testing", "playwright", "automation", "PRAMERN"],
+  "author": "Phongphisut Khenchat",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Phongphisut-Khenchat-Personal/System-Testing/issues"
+  },
+  "homepage": "https://github.com/Phongphisut-Khenchat-Personal/System-Testing#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^22.13.1"
+  }
+}
