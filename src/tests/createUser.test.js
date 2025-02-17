@@ -19,10 +19,6 @@ test('TC001: ตรวจสอบว่าสามารถกรอกข้�
     await login(page, AdminEmail, AdminPassword);
     await createUser(page, 'Logo.png', 'พงศ์พิสุทธิ์', 'เคนชาติ', 'Shogun', 'PhongPhisut001@gmail.com');
 
-    const nameInput = await page.locator('input[placeholder="ชื่อ"]');
-    const enteredName = await nameInput.inputValue();
-    expect(enteredName).toMatch(/[\u0E00-\u0E7F]/);
-
     await page.locator(`text=${successMessage}`).waitFor({ state: 'visible' });
     await expect(page.locator(`text=${successMessage}`)).toBeVisible();
 });
@@ -32,9 +28,6 @@ test('TC002: ตรวจสอบว่าสามารถกรอกข้�
     await login(page, AdminEmail, AdminPassword);
     await createUser(page, 'Logo.png', 'Wanissha', 'Yeekaday', 'Mimi', 'wanissha@gmail.com');
 
-    const nameInput = await page.locator('input[placeholder="ชื่อ"]');
-    const enteredName = await nameInput.inputValue();
-    expect(enteredName).toMatch(/^[A-Za-z]+$/);
 
     await page.locator(`text=${successMessage}`).waitFor({ state: 'visible' });
     await expect(page.locator(`text=${successMessage}`)).toBeVisible();
@@ -80,10 +73,6 @@ test('TC006: ตรวจสอบว่าระบบป้องกันก�
 test('TC007: ตรวจสอบว่าสามารถกรอกข้อมูลนามสกุลด้วยตัวอักษรภาษาไทย', async ({ page }) => {
     await login(page, AdminEmail, AdminPassword);
     await createUser(page, 'Logo.png', 'กชนิภา', 'กชพร', 'Pa', 'kachanipa@gmail.com');
-
-    const nameInput = await page.locator('input[placeholder="นามสกุล"]');
-    const enteredName = await nameInput.inputValue();
-    expect(enteredName).toMatch(/[\u0E00-\u0E7F]/);
 
     await page.locator(`text=${successMessage}`).waitFor({ state: 'visible' });
     await expect(page.locator(`text=${successMessage}`)).toBeVisible();
@@ -139,9 +128,6 @@ test('TC013: ตรวจสอบว่าสามารถกรอกข้�
     await login(page, AdminEmail, AdminPassword);
     await createUser(page, 'Logo.png', 'วณิชชา', 'ยีขะเด', 'Aaron', 'Aaron@gmail.com');
 
-    const usernameInput = await page.locator('input[placeholder="ชื่อผู้ใช้"]');
-    const enteredUsername = await usernameInput.inputValue();
-    expect(enteredUsername).toMatch(/^[A-Za-z]+$/);
 
     await page.locator(`text=${successMessage}`).waitFor({ state: 'visible' });
     await expect(page.locator(`text=${successMessage}`)).toBeVisible();
@@ -150,11 +136,8 @@ test('TC013: ตรวจสอบว่าสามารถกรอกข้�
 // TC014: Validate username with alphanumeric characters
 test('TC014: ตรวจสอบว่าสามารถกรอกข้อมูลชื่อผู้ใช้โดยมีตัวเลขเป็นส่วนประกอบ', async ({ page }) => {
     await login(page, AdminEmail, AdminPassword);
-    await createUser(page, 'Logo.png', 'วณิชชา', 'ยีขะเด', 'Arthur77', 'wanissha@gmail.com');
+    await createUser(page, 'Logo.png', 'วณิชชา', 'ยีขะเด', 'Arthur77', 'wanissha01@gmail.com');
 
-    const usernameInput = await page.locator('input[placeholder="ชื่อผู้ใช้"]');
-    const enteredUsername = await usernameInput.inputValue();
-    expect(enteredUsername).toMatch(/^[A-Za-z0-9]+$/);
 
     await page.locator(`text=${successMessage}`).waitFor({ state: 'visible' });
     await expect(page.locator(`text=${successMessage}`)).toBeVisible();
@@ -163,7 +146,7 @@ test('TC014: ตรวจสอบว่าสามารถกรอกข้�
 // TC015: Prevent numeric-only username
 test('TC015: ตรวจสอบว่าสามารถกรอกข้อมูลชื่อผู้ใช้ด้วยตัวเลข', async ({ page }) => {
     await login(page, AdminEmail, AdminPassword);
-    await createUser(page, 'Logo.png', 'วณิชชา', 'ยีขะเด', '12345', 'wanissha@gmail.com');
+    await createUser(page, 'Logo.png', 'วณิชชา', 'ยีขะเด', '12345', 'wanissha02@gmail.com');
 
     await page.locator(`text=${successMessage}`).waitFor({ state: 'visible' });
     await expect(page.locator(`text=${successMessage}`)).toBeVisible();

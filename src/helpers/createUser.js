@@ -21,10 +21,15 @@ export async function createUser(page, img, name, lastName, username, email) {
     await fileInput.setInputFiles(filePath);
 
     // กรอกข้อมูลผู้ใช้
-    await page.locator('input[placeholder="ชื่อ"]').fill(name);
-    await page.locator('input[placeholder="นามสกุล"]').fill(lastName);
-    await page.locator('input[placeholder="ชื่อผู้ใช้"]').fill(username);
-    await page.locator('input[placeholder="อีเมล"]').fill(email);
+    await page.locator('input[placeholder="ชื่อจริงของผู้ใช้"]').fill(name);
+    await page.locator('input[placeholder="นามสกุลของผู้ใช้"]').fill(lastName);
+    await page.locator('input[placeholder="กำหนดชื่อผู้ใช้สำหรับล็อกอิน"]').fill(username);
+    await page.locator('input[placeholder="ระบุอีเมลของผู้ใช้"]').fill(email);
+
+
+    await page.getByText("ผู้ใช้งานระบบทั่วไป").click();
+    await page.getByRole('option', { name: 'ผู้ดูแลระบบ' }).click();
+
     // กดบันทึก
     await page.locator('text="บันทึก"').click();
 }
