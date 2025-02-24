@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { login } from '../helpers/login.js'; 
-import { viewAllUser } from '../helpers/viewAllUser.js';
+import { login } from '../../helpers/login.js'; 
+import { viewAllUser } from '../../helpers/Users/viewAllUser.js';
 
 // Admin login credentials
 const AdminEmail = 'admin';

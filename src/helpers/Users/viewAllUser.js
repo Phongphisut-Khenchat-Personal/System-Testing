@@ -21,7 +21,7 @@ export async function viewAllUser(page, status) {
     const rowCount = await page.locator('.v-data-table__tr').count();
 
     if (rowCount === 0) {
-        console.log(`ไม่มีข้อมูลในสถานะ: ${status}`);
+        console.log(`No data available for status: ${status}`);
         return;  // Skip further checks or perform any desired action
     }
 
