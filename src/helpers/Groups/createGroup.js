@@ -1,47 +1,64 @@
+import { expect } from '@playwright/test';
 
-// Function to create a new group
-export async function createGroups(page, GroupName, DescriptionGroup, Members) {
-    // Open the 'Settings' menu
-    await page.locator('text=ตั้งค่า').click();
+/**
+ * Creates a new group with the specified name, description, and members.
+ * @param {Page} page - The Playwright page object to interact with the browser.
+ * @param {string} groupName - The name of the group to be created.
+ * @param {string} groupDescription - The description of the group.
+ * @param {string[]} [members] - An optional array of member names to add to the group.
+ */
+export async function createGroups(page, groupName, groupDescription, members) {
+    // Navigate to the settings menu
+    await page.locator('text=ตั้งค่า').first().click();
+    
+    // Open the groups submenu
+    await page.locator('text=กลุ่ม').first().click();
+    
+    // Click to open the group creation form
+    await page.locator('text=สร้างกลุ่ม').first().click();
 
-    // Open the 'Groups' submenu
-    await page.locator('text=กลุ่ม').click();
+    // Enter the group name into the designated input field
+    await page.locator('input[placeholder="ชื่อกลุ่ม"]').type(groupName, { delay: 0 });
+    
+    // Enter the group description into the designated input field
+    await page.locator('input[placeholder="คำอธิบายเกี่ยวกับกลุ่ม"]').type(groupDescription, { delay: 0 });
 
-    // Open the 'Create Group' menu
-    await page.locator('text=สร้างกลุ่ม').click();
-
-    // Fill in group information
-    await page.locator('input[placeholder="ชื่อกลุ่ม"]').fill(GroupName);
-    await page.locator('input[placeholder="คำอธิบายเกี่ยวกับกลุ่ม"]').fill(DescriptionGroup);
-
-    // Only interact with the "Search Member" if Members array is not empty
-    if (Members && Members.length > 0) {
-        // Open the "Search Member" field and click to open the member search
-        const searchInput = await page.locator('input[placeholder="ค้นหาสมาชิก"]');
-        await searchInput.click();
+    // Check if there are members to add to the group
+    if (members?.length) {
+        // Locate the member search input field
+        const searchInput = page.locator('input[placeholder="ค้นหาสมาชิก"]');
         
-        // Type something to open the dropdown and ensure it's populated
-        await searchInput.fill('');  // clear the input (or type something generic to force dropdown)
-
-        // Wait for the dropdown options to become visible
-        const memberOption = await page.locator('role=option');
-        await memberOption.waitFor({ state: 'visible' }); // Wait for dropdown to open
-
-        // Loop through the array of members and select them from the list
-        for (const member of Members) {
-            // Scroll down to make sure the dropdown is visible and not cut off
-            await searchInput.scrollIntoViewIfNeeded();
+        // Iterate over each member to add them to the group
+        for (const member of members) {
+            // Click the search input to activate it
+            await searchInput.click();
             
-            // Wait for the specific member to be visible in the dropdown options
-            const memberElement = await page.locator(`role=option[name="${member}"]`);
+            // Clear the search input to reset it
+            await searchInput.fill('');
             
-            // Wait for the member to appear and then click it
-            await memberElement.waitFor({ state: 'visible' });
-            await memberElement.click();
+            // Fill the search input with the member's name
+            await searchInput.fill(member);
+
+            // Locate the dropdown menu containing member options
+            const dropdown = page.locator('[role="menu"]');
+            
+            // Find the list items within the dropdown
+            const option = dropdown.locator('.v-list-item');
+
+            // Check if any options are available in the dropdown
+            if (await option.count()) {
+                // Click the first available option in the dropdown
+                await option.first().click({ force: true });
+            } else {
+                // If no options are found in the dropdown, try finding the member by text directly
+                const textOption = page.locator(`:text("${member}")`);
+                
+                // Click the first matching text option if found; otherwise, press Enter as a fallback
+                await (await textOption.count() ? textOption.first() : page.keyboard).click({ force: true }) || await page.keyboard.press('Enter');
+            }
         }
     }
 
-    // Click the 'Save' button
-    await page.locator('text="บันทึก"').click(); // Submit the form
+    // Submit the form by clicking the save button
+    await page.locator('text="บันทึก"').click();
 }
-
