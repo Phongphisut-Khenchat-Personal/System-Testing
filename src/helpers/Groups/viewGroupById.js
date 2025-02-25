@@ -1,52 +1,66 @@
 import { expect } from '@playwright/test';
 
+// Function to view group details by ID
 export async function viewGroupById(page) {
+    // Click on the 'Settings' menu
     await page.locator('text=ตั้งค่า').click();
     await page.waitForLoadState('networkidle');
 
+    // Click on the 'Groups' submenu
     await page.locator('text=กลุ่ม').click();
     await page.waitForLoadState('networkidle');
 
     while (true) {
+        // Wait for the data in the table to load
         await page.waitForSelector('.v-data-table__tr', { timeout: 10000 });
         const groupRows = await page.locator('.v-data-table__tr').all();
 
+        // If no rows are found, break the loop
         if (groupRows.length === 0) break;
 
         for (const row of groupRows) {
+            // Get the group name from the table
             const tableGroupName = await row.locator('td').first().textContent();
             if (!tableGroupName) continue;
 
-            // ข้ามกลุ่มที่มีปัญหา
+            // Skip problematic group
             if (tableGroupName.trim() === "ประเมินรอบครั้งที่ 1/2567") {
                 continue;
             }
 
+            // Wait for any overlay to be hidden
             await page.waitForSelector('.v-overlay__scrim', { state: 'hidden', timeout: 5000 });
 
+            // Click on the info icon
             const infoIcon = row.locator('.tabler-info-circle');
             await expect(infoIcon).toBeVisible({ timeout: 5000 });
             await infoIcon.click();
 
+            // Wait for the group details page to be visible
             await page.waitForSelector('.v-dialog, .group-details-page', { state: 'visible', timeout: 10000 });
             await page.waitForTimeout(1000);
 
+            // Get the group name from the group details page
             const detailsGroupNameElement = page.locator('.v-col.v-col-12 h2').first();
             await expect(detailsGroupNameElement).toBeVisible({ timeout: 5000 });
             const detailsGroupName = await detailsGroupNameElement.innerText();
 
+            // Verify that the group names match
             expect(detailsGroupName.trim()).toBe(tableGroupName.trim());
 
+            // Click the close button
             const closeButton = page.locator('.v-dialog-close-btn, button:has-text("Close")').first();
             await expect(closeButton).toBeVisible({ timeout: 5000 });
             await closeButton.click();
 
+            // Wait for the dialog and overlay to be hidden
             await Promise.all([
                 page.waitForSelector('.v-dialog', { state: 'hidden', timeout: 10000 }),
                 page.waitForSelector('.v-overlay__scrim', { state: 'hidden', timeout: 10000 })
             ]);
         }
 
+        // Click the next page button if available
         const nextButton = page.locator('#app button[aria-label="Next page"]:not([aria-disabled="true"])');
         if (!(await nextButton.isVisible())) break;
 
