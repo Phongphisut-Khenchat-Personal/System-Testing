@@ -6,7 +6,7 @@ import { viewKpiById } from '../../helpers/kpis/viewKpiById.js'; // Update path 
 const AdminEmail = 'admin';
 const AdminPassword = 'Adm!n123';
 
-test('TC007: Verify All Users Names Match Between Table and Details Across Pages', async ({ page }) => {
+test('TC001: Verify All Users Names Match Between Table and Details Across Pages', async ({ page }) => {
     // Perform login with admin credentials
     await login(page, AdminEmail, AdminPassword);
 
